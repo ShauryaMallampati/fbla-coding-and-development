@@ -347,6 +347,10 @@ Respond in JSON only with: isLegitimate (true/false), confidence (0-100), reason
 });
 
 // start the server
-app.listen(PORT, () => {
-  console.log(`🔍 Lost and Found running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🔍 Lost and Found running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
