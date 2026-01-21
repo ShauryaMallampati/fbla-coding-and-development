@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>School Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Find lost items on campus or report items you've found. Professional lost and found system for schools.">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Lost & Found</h1>
+        <p>Campus Recovery System</p>
+      </div>
+    </a>
+
+    <nav class="main-nav" aria-label="Main">
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="browse.html">Browse</a></li>
+        <li><a href="found.html">Report</a></li>
+        <li><a href="claim.html">Claim</a></li>
+        <li><a href="admin.html">Admin</a></li>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h2>Find Your Lost Items</h2>
+        <p>
+          Our campus lost and found system makes it easy to report found items, 
+          search for lost belongings, and claim what's yours. Fast, secure, and hassle-free.
+        </p>
+        <div class="hero-buttons">
+          <a href="browse.html" class="btn btn-primary">Search Items</a>
+          <a href="found.html" class="btn btn-secondary">Report Found Item</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <!-- Animated floating items -->
+        <div class="floating-item item-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6-7 6 7"/><rect x="2" y="9" width="20" height="12" rx="1"/><path d="M10 13v6M14 13v6"/></svg>
+          <span>Backpack</span>
+        </div>
+        
+        <div class="floating-item item-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M4 8c0-1 1-2 2-2h12c1 0 2 1 2 2v3c0 2-1 4-3 5l-2 8H7l-2-8c-2-1-3-3-3-5V8z"/></svg>
+          <span>Keys</span>
+        </div>
+        
+        <div class="floating-item item-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2c0-1 .5-2 1.5-2h3c1 0 1.5 1 1.5 2v1h-6V2z"/><rect x="6" y="3" width="12" height="16" rx="1" ry="1"/><line x1="10" y1="7" x2="10" y2="15"/><line x1="14" y1="7" x2="14" y2="15"/></svg>
+          <span>Water Bottle</span>
+        </div>
+        
+        <div class="floating-item item-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>Documents</span>
+        </div>
+
+        <!-- Center badge -->
+        <div class="found-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <div class="badge-number">50+</div>
+            <div class="badge-text">Items Found</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section section-light">
+    <div class="info-section">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Simple steps to recover your lost items</p>
+      </div>
+      
+      <div class="cards-grid">
+        <div class="info-card">
+          <h3>1. Report</h3>
+          <p>Found an item? <a href="found.html">Report it here</a> with a photo and details about where you found it. Our AI helps verify the content.</p>
+        </div>
+        
+        <div class="info-card">
+          <h3>2. Search</h3>
+          <p>Lost something? <a href="browse.html">Search our database</a> by item type, location, or date. Browse all reported items in one place.</p>
+        </div>
+        
+        <div class="info-card">
+          <h3>3. Claim</h3>
+          <p><a href="claim.html">Submit a claim</a> with proof of ownership. Provide details to verify the item is yours.</p>
+        </div>
+        
+        <div class="info-card">
+          <h3>4. Retrieve</h3>
+          <p>Once approved by administrators, collect your item from the main office with your student ID.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 0.75rem; border-left: 4px solid var(--accent);">
+        <h3 style="margin-top: 0; color: var(--text-primary);">Important Notice</h3>
+        <p style="margin-bottom: 0; color: var(--text-secondary);">Unclaimed items are donated after 30 days. Check regularly for your lost belongings!</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; 2026 School Lost & Found. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#" onclick="document.getElementById('sources').showModal(); return false;">Sources & Credits</a>
+    </div>
+  </div>
+</footer>
+
+<dialog id="sources">
+  <h3>Sources & Credits</h3>
+  <p>Built with care for the FBLA Website Coding & Development event 2025-2026.</p>
+  <ul>
+    <li><a href="https://lucide.dev/" target="_blank">Lucide Icons</a> - Open source SVG icons</li>
+    <li><a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs</a> - JavaScript & CSS reference</li>
+    <li><a href="https://supabase.com/" target="_blank">Supabase</a> - Database backend</li>
+    <li><a href="https://ai.google.dev/" target="_blank">Google Gemini API</a> - Content validation</li>
+  </ul>
+  <p style="font-size: 0.875rem; color: var(--text-muted);">See DOCUMENTATION.md for complete technical details.</p>
+  <form method="dialog" style="text-align: right;">
+    <button class="btn btn-secondary btn-small">Close</button>
+  </form>
+</dialog>
+
+<script src="theme.js"></script>
+<script>
+  // Mobile menu toggle
+  document.querySelector('.nav-toggle').addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('active');
+    });
+  });
+</script>
+</body>
+</html>
+</body>
+</html>

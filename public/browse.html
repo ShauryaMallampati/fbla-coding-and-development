@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Items - School Lost and Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search and browse found items in the school lost and found database. Filter by category or keyword.">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/><path d="M12 10v4"/><path d="M12 14h4"/><path d="M16 2v4"/><path d="M8 2v4"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>School Lost and Found</h1>
+        <p>Reconnect with your belongings</p>
+      </div>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="browse.html" class="active">Search Items</a></li>
+        <li><a href="found.html">Report Found</a></li>
+        <li><a href="claim.html">Claim Item</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section section-alt">
+    <header class="section-header">
+      <h2>Search found items</h2>
+      <p>Start by searching the current list of found items. You can filter by name, category, or location.</p>
+    </header>
+
+    <form class="search-bar" aria-label="Search found items">
+      <div class="form-group">
+        <label for="searchQuery">Search text</label>
+        <input id="searchQuery" name="searchQuery" type="search" placeholder="Type part of item name or description">
+      </div>
+      <div class="form-group">
+        <label for="searchCategory">Category</label>
+        <select id="searchCategory" name="searchCategory">
+          <option value="all">All categories</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="school-supplies">School supplies</option>
+          <option value="sports">Sports gear</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <button type="button" id="searchButton" class="btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        Search
+      </button>
+      <button type="button" id="clearSearchButton" class="btn-secondary">Clear</button>
+    </form>
+
+    <div id="itemsSummary" class="items-summary" aria-live="polite"></div>
+
+    <div id="itemsList" class="items-grid" aria-live="polite" aria-label="List of found items">
+      <!-- Cards injected by browse.js -->
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-info">
+      <p>&copy; 2025 School Lost and Found. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a href="admin.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="theme.js"></script>
+<script src="browse.js"></script>
+</body>
+</html>

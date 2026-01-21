@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Claim Item - School Lost and Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Submit a claim to retrieve your lost item. Provide ownership proof and contact information.">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/><path d="M12 10v4"/><path d="M12 14h4"/><path d="M16 2v4"/><path d="M8 2v4"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>School Lost and Found</h1>
+        <p>Reconnect with your belongings</p>
+      </div>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="browse.html">Search Items</a></li>
+        <li><a href="found.html">Report Found</a></li>
+        <li><a href="claim.html" class="active">Claim Item</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section section-alt">
+    <header class="section-header">
+      <h2>Claim an item</h2>
+      <p>If you see your item listed, please fill out this form to initiate the claim process.</p>
+    </header>
+
+    <div class="card">
+      <form id="claimForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="claimItemId">Item ID *</label>
+            <input type="number" id="claimItemId" name="itemId" required placeholder="ID from the item card">
+          </div>
+          <div class="form-group">
+            <label for="claimerName">Your Name *</label>
+            <input type="text" id="claimerName" name="claimerName" required placeholder="First and Last Name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="claimerEmail">Email *</label>
+          <input type="email" id="claimerEmail" name="claimerEmail" required placeholder="your.email@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="claimDetails">Proof of Ownership / Details *</label>
+          <textarea id="claimDetails" name="details" rows="3" required placeholder="Describe the item in detail to prove ownership (e.g. contents of bag, scratches on phone)."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Submit Claim
+          </button>
+          <span id="claimFormStatus" class="form-status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-info">
+      <p>&copy; 2025 School Lost and Found. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a href="admin.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="theme.js"></script>
+<script src="claim.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "school-lost-and-found",
+  "version": "1.0.0",
+  "description": "School lost and found website for FBLA Website Coding and Development 2025-2026",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.84.0",
+    "express": "^4.21.0",
+    "multer": "^1.4.4"
+  }
+}
