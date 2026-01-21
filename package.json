@@ -4,7 +4,8 @@
   "description": "School lost and found website for FBLA Website Coding and Development 2025-2026",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "npm install"
   },
   "author": "",
   "license": "MIT",
