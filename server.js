@@ -2,56 +2,84 @@ const express = require("express");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+const dotenv = require("dotenv");
 const { createClient } = require("@supabase/supabase-js");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// db setup
+// load envs (local overrides example)
+dotenv.config({ path: path.join(__dirname, ".env.local") });
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+// db hookup (supabase)
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+const isPlaceholder = (value) =>
+  !value || value.toLowerCase().startsWith("your_");
+const missingEnv = ["SUPABASE_URL", "SUPABASE_KEY"].filter((key) =>
+  isPlaceholder(process.env[key])
+);
+if (missingEnv.length > 0) {
+  console.error(`Missing required env vars: ${missingEnv.join(", ")}`);
+  process.exit(1);
+}
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// ai stuff (gemini checks if posts are mid or not)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+// ai vibe check (optional)
+const hasGeminiKey = !isPlaceholder(process.env.GEMINI_API_KEY);
+const genAI = hasGeminiKey ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+const model = genAI ? genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" }) : null;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// where uploads live
+// uploads stash (local)
 const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+let uploadsAvailable = true;
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+  }
+} catch (err) {
+  uploadsAvailable = false;
+  console.warn(`Uploads disabled: ${err.message}`);
 }
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueId = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const fileExt = path.extname(file.originalname);
-    cb(null, "item-" + uniqueId + fileExt);
-  }
-});
+const storage = uploadsAvailable
+  ? multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, uploadsDir);
+      },
+      filename: (req, file, cb) => {
+        const uniqueId = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const fileExt = path.extname(file.originalname);
+        cb(null, "item-" + uniqueId + fileExt);
+      }
+    })
+  : multer.memoryStorage();
 
-const upload = multer({ storage }); // file upload handler
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }
+}); // file upload handler (5MB max)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static(uploadsDir));
+if (uploadsAvailable) {
+  app.use("/uploads", express.static(uploadsDir));
+}
 app.use(express.static(path.join(__dirname, "public")));
 
-// serve the homepage
+// serve homepage
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// admin dashboard
+// admin dashboard page
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
-// get all items (searchable)
+// get items (filters + search)
 app.get("/api/items", async (req, res) => {
   try {
     const { q, status, category } = req.query;
@@ -66,12 +94,12 @@ app.get("/api/items", async (req, res) => {
       query = query.in("status", ["approved", "claimed"]);
     }
 
-    // filter by category if specified
+    // category filter
     if (category && category !== "all") {
       query = query.eq("category", category);
     }
 
-    // search across title, description, location
+    // search across title/description/location
     if (q) {
       query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%,location_found.ilike.%${q}%`);
     }
@@ -109,6 +137,10 @@ app.post("/api/items", upload.single("photo"), async (req, res) => {
     // need the basics
     if (!title || !locationFound || !dateFound) {
       return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    if (req.file && !uploadsAvailable) {
+      return res.status(503).json({ error: "Uploads are unavailable in this environment" });
     }
 
     const photoPath = req.file ? "/uploads/" + req.file.filename : null;
@@ -293,9 +325,13 @@ app.put("/api/claims/:id/status", async (req, res) => {
   }
 });
 
-// ai checks if the post is mid or not (gemini validation)
+// ai vibe check for submissions (gemini validation)
 app.post("/api/validate-item/:id", async (req, res) => {
   try {
+    if (!model) {
+      return res.status(503).json({ error: "AI validation unavailable (missing GEMINI_API_KEY)" });
+    }
+
     const { id } = req.params;
 
     const { data: item, error } = await supabase

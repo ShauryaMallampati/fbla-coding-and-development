@@ -9,7 +9,7 @@ const adminItemsSummary = document.getElementById("adminItemsSummary");
 async function loadAdminItems() {
   try {
     const params = new URLSearchParams();
-    params.set("status", "all"); // Admin sees all statuses
+    params.set("status", "all"); // admin view = no filter
 
     const q = adminSearchQuery.value.trim();
     if (q) params.set("q", q);
@@ -59,23 +59,23 @@ function renderAdminItems(items) {
     adminItemsSummary.textContent = summaryText;
   }
 
-  // Auto-validate pending items without AI validation
+  // auto-validate pending items missing AI checks
   autoValidatePendingItems(items);
 
   for (const item of items) {
     const tr = document.createElement("tr");
 
-    // ID
+    // ID (reference)
     const tdId = document.createElement("td");
     tdId.textContent = item.id;
     tr.appendChild(tdId);
 
-    // Item name
+    // item name
     const tdItem = document.createElement("td");
     tdItem.textContent = item.title || "Untitled";
     tr.appendChild(tdItem);
 
-    // Details
+    // details snapshot
     const tdDetails = document.createElement("td");
     const detailsList = document.createElement("div");
     detailsList.style.fontSize = "0.875rem";
@@ -94,7 +94,7 @@ function renderAdminItems(items) {
     tdDetails.appendChild(detailsList);
     tr.appendChild(tdDetails);
 
-    // Status
+    // status + badges
     const tdStatus = document.createElement("td");
     
     const statusContainer = document.createElement("div");
@@ -121,7 +121,7 @@ function renderAdminItems(items) {
     
     statusContainer.appendChild(statusBadge);
     
-    // AI validation badge (if exists)
+    // AI badge if we have a result
     if (item.ai_validation) {
       const aiBadge = document.createElement("span");
       aiBadge.className = "badge";
@@ -145,7 +145,7 @@ function renderAdminItems(items) {
     tdStatus.appendChild(statusContainer);
     tr.appendChild(tdStatus);
 
-    // Actions
+    // actions row
     const tdActions = document.createElement("td");
     
     const actionsDiv = document.createElement("div");
@@ -153,16 +153,16 @@ function renderAdminItems(items) {
     actionsDiv.style.gap = "0.5rem";
     actionsDiv.style.flexWrap = "wrap";
 
-    // AI Validate button
+    // AI validate button
     const btnValidate = document.createElement("button");
     btnValidate.className = "btn-small";
     btnValidate.style.backgroundColor = "#dbeafe";
     btnValidate.style.color = "#1e40af";
     btnValidate.textContent = "🤖 Validate";
-    btnValidate.onclick = () => validateItemWithAI(item.id);
+    btnValidate.onclick = (event) => validateItemWithAI(item.id, event.currentTarget);
     actionsDiv.appendChild(btnValidate);
 
-    // Status change buttons
+    // status change buttons
     if (item.status === "pending") {
       const btnApprove = document.createElement("button");
       btnApprove.className = "btn-small btn-primary";
@@ -223,13 +223,15 @@ async function changeItemStatus(itemId, newStatus) {
   }
 }
 
-async function validateItemWithAI(itemId) {
+async function validateItemWithAI(itemId, buttonEl) {
   try {
-    // Show loading state
-    const button = event.target;
-    const originalText = button.textContent;
-    button.textContent = "🤖 Validating...";
-    button.disabled = true;
+    // loading state so users know it's working
+    const button = buttonEl;
+    const originalText = button ? button.textContent : "";
+    if (button) {
+      button.textContent = "🤖 Validating...";
+      button.disabled = true;
+    }
 
     const response = await fetch(`/api/validate-item/${itemId}`, {
       method: "POST",
@@ -244,7 +246,7 @@ async function validateItemWithAI(itemId) {
 
     const validation = await response.json();
     
-    // Show result
+    // show result
     let resultMessage = `AI Validation Result:\n\n`;
     resultMessage += `Legitimate: ${validation.isLegitimate ? "✓ YES" : "✗ NO"}\n`;
     resultMessage += `Confidence: ${validation.confidence}%\n`;
@@ -256,11 +258,16 @@ async function validateItemWithAI(itemId) {
 
     alert(resultMessage);
 
-    // Reload to show updated AI badge
+    // refresh to show the new AI badge
     await loadAdminItems();
   } catch (err) {
     console.error(err);
     alert("Failed to validate item with AI: " + err.message);
+  } finally {
+    if (buttonEl) {
+      buttonEl.textContent = "🤖 Validate";
+      buttonEl.disabled = false;
+    }
   }
 }
 
@@ -286,7 +293,7 @@ async function deleteItem(itemId) {
   }
 }
 
-// Load claims for admin review
+// load claims for review
 async function loadAdminClaims() {
   try {
     const response = await fetch("/api/claims");
@@ -313,17 +320,17 @@ function renderAdminClaims(claims) {
   for (const claim of claims) {
     const tr = document.createElement("tr");
 
-    // Claim ID
+    // claim ID
     const tdId = document.createElement("td");
     tdId.textContent = claim.id;
     tr.appendChild(tdId);
 
-    // Item title
+    // item title
     const tdItem = document.createElement("td");
     tdItem.textContent = claim.item_title || `Item #${claim.item_id}`;
     tr.appendChild(tdItem);
 
-    // Claimant info
+    // claimant info
     const tdClaimant = document.createElement("td");
     const claimantDiv = document.createElement("div");
     claimantDiv.style.fontSize = "0.875rem";
@@ -334,14 +341,14 @@ function renderAdminClaims(claims) {
     tdClaimant.appendChild(claimantDiv);
     tr.appendChild(tdClaimant);
 
-    // Details
+    // details
     const tdDetails = document.createElement("td");
     tdDetails.textContent = claim.details || "No details provided";
     tdDetails.style.maxWidth = "300px";
     tdDetails.style.wordWrap = "break-word";
     tr.appendChild(tdDetails);
 
-    // Status
+    // status
     const tdStatus = document.createElement("td");
     const statusBadge = document.createElement("span");
     statusBadge.className = "badge";
@@ -360,7 +367,7 @@ function renderAdminClaims(claims) {
     tdStatus.appendChild(statusBadge);
     tr.appendChild(tdStatus);
 
-    // Actions
+    // action buttons
     const tdActions = document.createElement("td");
     
     const actionsDiv = document.createElement("div");
@@ -412,7 +419,7 @@ async function changeClaimStatus(claimId, newStatus) {
   }
 }
 
-// Event listeners
+// event listeners
 if (adminRefreshButton) {
   adminRefreshButton.addEventListener("click", () => {
     loadAdminItems();
@@ -436,7 +443,7 @@ if (adminCategoryFilter) {
   adminCategoryFilter.addEventListener("change", loadAdminItems);
 }
 
-// Auto-validate pending items that don't have AI validation yet
+// auto-validate pending items missing AI checks
 async function autoValidatePendingItems(items) {
   const needsValidation = items.filter(item => 
     !item.ai_validation && item.status === "pending"
@@ -446,7 +453,7 @@ async function autoValidatePendingItems(items) {
 
   console.log(`Auto-validating ${needsValidation.length} pending items...`);
 
-  // Validate up to 3 items at a time to avoid overwhelming the API
+  // cap at 3 so we don't spam the API
   const itemsToValidate = needsValidation.slice(0, 3);
 
   for (const item of itemsToValidate) {
@@ -462,7 +469,7 @@ async function autoValidatePendingItems(items) {
     }
   }
 
-  // Reload items after validation
+  // refresh after validation
   if (itemsToValidate.length > 0) {
     setTimeout(() => {
       loadAdminItems();
@@ -470,7 +477,7 @@ async function autoValidatePendingItems(items) {
   }
 }
 
-// Initial load
+// initial load
 document.addEventListener("DOMContentLoaded", () => {
   loadAdminItems();
   loadAdminClaims();

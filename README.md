@@ -32,12 +32,12 @@ cd fbla-coding-and-development
 npm install
 ```
 
-3. Set up environment variables
+3. Set up environment variables (keep keys private)
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-Then edit `.env` and add your keys:
+Then edit `.env.local` and add your keys:
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_key
@@ -65,9 +65,11 @@ Visit `http://localhost:3000`
 │   ├── admin.html      # Admin panel
 │   ├── styles.css      # Global styles
 │   └── *.js            # Frontend logic
+├── api/                # Serverless entry (Vercel)
 ├── server.js           # Express backend
 ├── package.json        # Dependencies
-└── DOCUMENTATION.md    # Full tech docs
+├── DOCUMENTATION.md    # Full tech docs
+└── .env.example        # Safe env template
 ```
 
 ## API Endpoints

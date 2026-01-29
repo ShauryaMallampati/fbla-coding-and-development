@@ -30,7 +30,7 @@ A web app for finding lost items on campus. Users post items they found, search 
 
 ## Setup
 1. `npm install`
-2. Create `.env` with your API keys (see `.env.example`)
+2. Create `.env.local` with your API keys (see `.env.example`)
 3. `npm start`
 4. Visit `http://localhost:3000`
 

@@ -24,7 +24,7 @@
     </a>
 
     <nav class="main-nav" aria-label="Main">
-      <button class="nav-toggle" aria-label="Toggle menu">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
       </button>
       <ul class="nav-links">
@@ -33,17 +33,19 @@
         <li><a href="found.html">Report</a></li>
         <li><a href="claim.html">Claim</a></li>
         <li><a href="admin.html">Admin</a></li>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
-          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
+        <li>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </li>
       </ul>
     </nav>
   </div>
 </header>
 
 <main id="main">
-  <!-- Hero Section -->
+  <!-- Hero section (big intro moment) -->
   <section class="hero">
     <div class="hero-container">
       <div class="hero-content">
@@ -58,7 +60,7 @@
         </div>
       </div>
       <div class="hero-visual">
-        <!-- Animated floating items -->
+        <!-- Floating items (little motion vibe) -->
         <div class="floating-item item-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6-7 6 7"/><rect x="2" y="9" width="20" height="12" rx="1"/><path d="M10 13v6M14 13v6"/></svg>
           <span>Backpack</span>
@@ -79,7 +81,7 @@
           <span>Documents</span>
         </div>
 
-        <!-- Center badge -->
+        <!-- Center badge (quick stats) -->
         <div class="found-badge">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <div>
@@ -91,7 +93,7 @@
     </div>
   </section>
 
-  <!-- How It Works Section -->
+  <!-- How it works (quick steps) -->
   <section class="section section-light">
     <div class="info-section">
       <div class="section-title">
@@ -154,20 +156,5 @@
 </dialog>
 
 <script src="theme.js"></script>
-<script>
-  // Mobile menu toggle
-  document.querySelector('.nav-toggle').addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.toggle('active');
-  });
-
-  // Close menu when a link is clicked
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
-      document.querySelector('.nav-links').classList.remove('active');
-    });
-  });
-</script>
-</body>
-</html>
 </body>
 </html>

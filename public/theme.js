@@ -23,8 +23,15 @@ function initNav() {
   
   if (navToggleBtn && navLinksEl) {
     navToggleBtn.addEventListener("click", () => {
-      const isOpen = navLinksEl.classList.toggle("nav-open");
+      const isOpen = navLinksEl.classList.toggle("active");
       navToggleBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinksEl.addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        navLinksEl.classList.remove("active");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      }
     });
   }
 }
