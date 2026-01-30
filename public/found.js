@@ -17,7 +17,10 @@ if (foundFormEl) {
 
       if (!response.ok) {
         const errBody = await response.json().catch(() => ({}));
-        throw new Error(errBody.error || "Failed to submit item");
+        const detail = errBody.hint
+          ? `${errBody.error || "Failed to submit item"} — ${errBody.hint}`
+          : errBody.error;
+        throw new Error(detail || "Failed to submit item");
       }
 
       const data = await response.json();
