@@ -6,18 +6,37 @@ const dotenv = require("dotenv");
 const { createClient } = require("@supabase/supabase-js");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// load envs (local overrides example)
-dotenv.config({ path: path.join(__dirname, ".env.local") });
-dotenv.config({ path: path.join(__dirname, ".env") });
+const isPlaceholder = (value) =>
+  !value || value.toLowerCase().startsWith("your_");
+
+const existingEnv = new Set(Object.keys(process.env));
+const loadEnvFile = (filePath) => {
+  if (!fs.existsSync(filePath)) return;
+  const parsed = dotenv.parse(fs.readFileSync(filePath));
+  for (const [key, value] of Object.entries(parsed)) {
+    if (isPlaceholder(value)) continue;
+    if (existingEnv.has(key)) continue;
+    process.env[key] = value;
+  }
+};
+
+// load envs (local overrides without clobbering real env vars)
+loadEnvFile(path.join(__dirname, ".env"));
+loadEnvFile(path.join(__dirname, ".env.local"));
 
 // db hookup (supabase)
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const isPlaceholder = (value) =>
-  !value || value.toLowerCase().startsWith("your_");
-const missingEnv = ["SUPABASE_URL", "SUPABASE_KEY"].filter((key) =>
-  isPlaceholder(process.env[key])
-);
+const supabaseKey =
+  process.env.SUPABASE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_KEY;
+
+const missingEnv = [];
+if (isPlaceholder(supabaseUrl)) missingEnv.push("SUPABASE_URL");
+if (isPlaceholder(supabaseKey)) {
+  missingEnv.push("SUPABASE_KEY (or SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY)");
+}
 if (missingEnv.length > 0) {
   console.error(`Missing required env vars: ${missingEnv.join(", ")}`);
   process.exit(1);
@@ -61,6 +80,22 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }
 }); // file upload handler (5MB max)
+
+const SCHEMA_CACHE_ERROR_CODE = "PGRST205";
+const getSupabaseErrorResponse = (error, fallbackMessage) => {
+  if (error?.code === SCHEMA_CACHE_ERROR_CODE) {
+    return {
+      status: 500,
+      body: {
+        error: fallbackMessage,
+        hint:
+          "Supabase tables not found or schema cache is stale. Run npm run setup:supabase or the SQL in SUPABASE-SETUP.md, then run: NOTIFY pgrst, 'reload schema';"
+      }
+    };
+  }
+
+  return { status: 500, body: { error: fallbackMessage } };
+};
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -111,7 +146,8 @@ app.get("/api/items", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to load items" });
+      const response = getSupabaseErrorResponse(error, "Failed to load items");
+      return res.status(response.status).json(response.body);
     }
 
     res.json(data || []);
@@ -164,7 +200,8 @@ app.post("/api/items", upload.single("photo"), async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to submit item" });
+      const response = getSupabaseErrorResponse(error, "Failed to submit item");
+      return res.status(response.status).json(response.body);
     }
 
     res.status(201).json({
@@ -195,7 +232,8 @@ app.put("/api/items/:id/status", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to update status" });
+      const response = getSupabaseErrorResponse(error, "Failed to update status");
+      return res.status(response.status).json(response.body);
     }
 
     res.json({ message: "Status updated" });
@@ -217,7 +255,8 @@ app.delete("/api/items/:id", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to delete item" });
+      const response = getSupabaseErrorResponse(error, "Failed to delete item");
+      return res.status(response.status).json(response.body);
     }
 
     res.json({ message: "Item deleted" });
@@ -252,7 +291,8 @@ app.post("/api/claims", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to submit claim" });
+      const response = getSupabaseErrorResponse(error, "Failed to submit claim");
+      return res.status(response.status).json(response.body);
     }
 
     res.status(201).json({
@@ -280,7 +320,8 @@ app.get("/api/claims", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to load claims" });
+      const response = getSupabaseErrorResponse(error, "Failed to load claims");
+      return res.status(response.status).json(response.body);
     }
 
     // add item title to each claim for easier display
@@ -315,7 +356,8 @@ app.put("/api/claims/:id/status", async (req, res) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return res.status(500).json({ error: "Failed to update claim status" });
+      const response = getSupabaseErrorResponse(error, "Failed to update claim status");
+      return res.status(response.status).json(response.body);
     }
 
     res.json({ message: "Claim status updated" });
@@ -341,6 +383,9 @@ app.post("/api/validate-item/:id", async (req, res) => {
       .single();
 
     if (error || !item) {
+      if (error) {
+        console.error("Supabase error:", error);
+      }
       return res.status(404).json({ error: "Item not found" });
     }
 

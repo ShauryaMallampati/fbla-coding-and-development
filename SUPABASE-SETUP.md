@@ -42,6 +42,16 @@ create index if not exists items_category_idx on items(category);
 create index if not exists items_location_idx on items(location_found);
 ```
 
+Or run the helper script (requires your database connection string):
+1) Add `SUPABASE_DB_URL` to `.env.local` (Project Settings -> Database -> Connection string).
+2) Run `npm run setup:supabase`
+
+If you ever see "Could not find the table 'public.claims' in the schema cache",
+run this in the SQL editor and retry:
+```sql
+NOTIFY pgrst, 'reload schema';
+```
+
 ## 3) RLS (Row Level Security)
 For a demo build, you can keep RLS **off** so the API can read/write.
 If you enable RLS, create policies that allow read/write for your use case.

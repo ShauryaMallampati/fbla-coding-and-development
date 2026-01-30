@@ -46,6 +46,7 @@ PORT=3000
 ```
 
 4. Set up Supabase database (see [SUPABASE-SETUP.md](SUPABASE-SETUP.md))
+   - Optional helper: add `SUPABASE_DB_URL` to `.env.local` and run `npm run setup:supabase`
 
 5. Start the server
 ```bash
